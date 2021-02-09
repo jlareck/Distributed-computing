@@ -4,11 +4,11 @@ import javax.swing.*;
 
 public class Slider extends JFrame{
 
-    private JButton increasePriorityButton1;
-    private JButton increasePriorityButton2;
+    private JButton increasePriority2;
+    private JButton increasePriority1;
 
-    private JButton decreasePriorityButton1;
-    private JButton decreasePriorityButton2;
+    private JButton decreasePriority2;
+    private JButton decreasePriority1;
     private JSlider slider;
     private JPanel mainPanel;
     private JButton startButton;
@@ -26,12 +26,12 @@ public class Slider extends JFrame{
         startButton.addActionListener(e -> cvt.startTesting());
 
 
-        increasePriorityButton1.addActionListener(e -> cvt.incIncPrior());
+        increasePriority2.addActionListener(e -> cvt.increase2());
 
-        decreasePriorityButton1.addActionListener(e -> cvt.decIncPrior());
+        decreasePriority2.addActionListener(e -> cvt.decrease2());
 
-        increasePriorityButton2.addActionListener(e -> cvt.incDecPrior());
+        increasePriority1.addActionListener(e -> cvt.increase1());
 
-        decreasePriorityButton2.addActionListener(e -> cvt.decDecPrior());
+        decreasePriority1.addActionListener(e -> cvt.decrease1());
     }
 }

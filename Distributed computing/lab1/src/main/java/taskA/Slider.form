@@ -23,7 +23,7 @@
           <text value="Thread 10"/>
         </properties>
       </component>
-      <component id="a3d25" class="javax.swing.JButton" binding="increasePriorityButton2">
+      <component id="a3d25" class="javax.swing.JButton" binding="increasePriority1">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -40,7 +40,7 @@
           <text value="Thread 90"/>
         </properties>
       </component>
-      <component id="8736d" class="javax.swing.JButton" binding="increasePriorityButton1" default-binding="true">
+      <component id="8736d" class="javax.swing.JButton" binding="increasePriority2">
         <constraints>
           <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -58,7 +58,7 @@
           <value value="5000000"/>
         </properties>
       </component>
-      <component id="38db9" class="javax.swing.JButton" binding="decreasePriorityButton2" default-binding="true">
+      <component id="38db9" class="javax.swing.JButton" binding="decreasePriority1">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -66,7 +66,7 @@
           <text value="Priority --"/>
         </properties>
       </component>
-      <component id="79f7c" class="javax.swing.JButton" binding="decreasePriorityButton1" default-binding="true">
+      <component id="79f7c" class="javax.swing.JButton" binding="decreasePriority2">
         <constraints>
           <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
