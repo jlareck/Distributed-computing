@@ -22,33 +22,33 @@ public class Slider extends JFrame{
         setVisible(true);
         pack();
 
-        SliderInteractor cvt = new SliderInteractor(slider);
+        SliderInteractor sliderInteractor = new SliderInteractor(slider);
 
 
 
         startButton1.addActionListener(e ->{
-            cvt.start1();
+            sliderInteractor.start1();
             semaphoreLabel.setText("Thread1 locked the slider");
             startButton2.setEnabled(false);
 
         });
 
         stopButton1.addActionListener(e ->{
-            cvt.stop1();
+            sliderInteractor.stop1();
             semaphoreLabel.setText("Thread1 unlocked the slider");
             startButton2.setEnabled(true);
 
         } );
 
         startButton2.addActionListener(e -> {
-            cvt.start2();
+            sliderInteractor.start2();
             semaphoreLabel.setText("Thread2 locked the slider");
             startButton1.setEnabled(false);
 
         });
 
         stopButton2.addActionListener(e ->{
-            cvt.stop2();
+            sliderInteractor.stop2();
             semaphoreLabel.setText("Thread2 unlocked the slider");
             startButton1.setEnabled(true);
 

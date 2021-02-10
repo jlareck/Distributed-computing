@@ -22,16 +22,16 @@ public class Slider extends JFrame{
         setVisible(true);
         pack();
 
-        SliderInteractor cvt = new SliderInteractor(slider);
-        startButton.addActionListener(e -> cvt.startTesting());
+        SliderInteractor sliderInteractor = new SliderInteractor(slider);
+        startButton.addActionListener(e -> sliderInteractor.startTesting());
 
 
-        increasePriority2.addActionListener(e -> cvt.increase2());
+        increasePriority2.addActionListener(e -> sliderInteractor.increase2());
 
-        decreasePriority2.addActionListener(e -> cvt.decrease2());
+        decreasePriority2.addActionListener(e -> sliderInteractor.decrease2());
 
-        increasePriority1.addActionListener(e -> cvt.increase1());
+        increasePriority1.addActionListener(e -> sliderInteractor.increase1());
 
-        decreasePriority1.addActionListener(e -> cvt.decrease1());
+        decreasePriority1.addActionListener(e -> sliderInteractor.decrease1());
     }
 }
