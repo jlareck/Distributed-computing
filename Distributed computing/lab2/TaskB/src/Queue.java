@@ -2,14 +2,14 @@ import java.util.LinkedList;
 
 public class Queue {
     private final LinkedList<Integer> queue = new LinkedList<>();
-    private int maxSize;
+    private int size;
 
-    public Queue(int maxSize) {
-        this.maxSize = maxSize;
+    public Queue(int size) {
+        this.size = size;
     }
 
     public synchronized void add(Integer elem) throws InterruptedException {
-        while (queue.size() >= maxSize)
+        while (queue.size() >= size)
             wait();
         notifyAll();
         queue.add(elem);

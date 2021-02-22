@@ -1,8 +1,7 @@
 public class AccountantNechiporuk implements Runnable {
     private Queue queue;
+    private int totalSum;
     private int numberOfElements;
-    private int sum;
-
     public AccountantNechiporuk(Queue queue, int numberOfElements) {
         this.queue = queue;
         this.numberOfElements = numberOfElements;
@@ -13,15 +12,15 @@ public class AccountantNechiporuk implements Runnable {
         for (int i = 0; i < numberOfElements; i++) {
             try {
                 Integer element = queue.poll();
-                sum += element;
-                System.out.println("The item with cost " + element + "$ was received");
+                totalSum += element;
+                System.out.println("The item with cost " + element + " was added to totalSum");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public int getSum() {
-        return sum;
+    public int getTotalSum() {
+        return totalSum;
     }
 }
