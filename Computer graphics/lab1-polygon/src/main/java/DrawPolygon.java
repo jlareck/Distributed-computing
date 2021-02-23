@@ -23,10 +23,13 @@ public class DrawPolygon extends JPanel {
         xPositionPoint = new int[] {150, 250, 400, 460, 470, 310, 200, 40, 20, 50};
         yPositionPoint = new int[] {450, 450, 400, 300, 200, 50, 40, 140, 250, 370};
         for(int i = 0;i<xPositionPoint.length;i++){
-            points.add(new Point(xPositionPoint[i] + 10,yPositionPoint[i] + 30));
+            points.add(new Point(xPositionPoint[i],yPositionPoint[i]));
         }
     }
-
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(800, 600);
+    }
     @Override
     protected void paintComponent(Graphics g) {
 
