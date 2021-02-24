@@ -8,6 +8,13 @@ public class Queue {
         this.size = size;
     }
 
+    public synchronized Integer poll() throws InterruptedException {
+        while (queue.size() == 0)
+            wait();
+        notifyAll();
+        return queue.removeFirst();
+    }
+
     public synchronized void add(Integer elem) throws InterruptedException {
         while (queue.size() >= size)
             wait();
@@ -15,10 +22,5 @@ public class Queue {
         queue.add(elem);
     }
 
-    public synchronized Integer poll() throws InterruptedException {
-        while (queue.size() == 0)
-            wait();
-        notifyAll();
-        return queue.removeFirst();
-    }
+
 }
