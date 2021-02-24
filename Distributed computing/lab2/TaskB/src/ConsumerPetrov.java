@@ -14,8 +14,8 @@ public class ConsumerPetrov implements Runnable{
         for (int i = 0; i < numberOfElements; i++ ) {
             try {
                 Integer element = producerQueue.poll();
-                System.out.println("The item with cost " + element + " was loaded to accountant Nechiporuk");
                 accountantQueue.add(element);
+                System.out.println("The item with cost " + element + " was loaded to accountant Nechiporuk");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

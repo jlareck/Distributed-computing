@@ -1,6 +1,6 @@
 public class AccountantNechiporuk implements Runnable {
     private Queue queue;
-    private int totalSum;
+    public int totalSum;
     private int numberOfElements;
     public AccountantNechiporuk(Queue queue, int numberOfElements) {
         this.queue = queue;
@@ -20,7 +20,5 @@ public class AccountantNechiporuk implements Runnable {
         }
     }
 
-    public int getTotalSum() {
-        return totalSum;
-    }
+
 }

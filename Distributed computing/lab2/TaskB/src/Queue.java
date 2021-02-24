@@ -9,15 +9,17 @@ public class Queue {
     }
 
     public synchronized Integer poll() throws InterruptedException {
-        while (queue.size() == 0)
+        while (queue.isEmpty()) {
             wait();
+        }
         notifyAll();
         return queue.removeFirst();
     }
 
     public synchronized void add(Integer elem) throws InterruptedException {
-        while (queue.size() >= size)
+        while (size <= queue.size()){
             wait();
+        }
         notifyAll();
         queue.add(elem);
     }
