@@ -1,0 +1,3 @@
+interface Statement {
+    boolean isTrue();
+}
