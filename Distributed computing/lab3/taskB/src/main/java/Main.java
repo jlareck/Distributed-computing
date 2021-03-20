@@ -23,7 +23,7 @@ public class Main {
 
         try {
             executor.shutdownNow();
-            executor.awaitTermination(Config.Main.workTime, TimeUnit.MICROSECONDS);
+            executor.awaitTermination(0, TimeUnit.MICROSECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

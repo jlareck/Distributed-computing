@@ -2,7 +2,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Barbershop {
-    private AtomicInteger queueSpace = new AtomicInteger(Config.Barbershop.queueCapacity);
+    private AtomicInteger queueSpace = new AtomicInteger(0);
     private final Semaphore barbers = new Semaphore(1, true);
     private final Semaphore customers = new Semaphore(1, true);
     private final Object chairMutex = new Object();
@@ -16,17 +16,13 @@ public class Barbershop {
                                   Action onDecline) {
 
         onEnter.act();
-        if (getSpace() <= 0) {
-            onDecline.act();
-            return;
-        }
         standInQueue();
 
         if (hasWaitingCustomers()) {
-            decSpace();
+
             onWait.act();
             sitInChair(customer, onSit);
-            incSpace();
+
         } else {
             sitInChair(customer, onSit);
         }
@@ -55,23 +51,6 @@ public class Barbershop {
         freeBarber();
     }
 
-    public int getSpace() {
-        synchronized (chairMutex) {
-            return queueSpace.get();
-        }
-    }
-
-    public void decSpace() {
-        synchronized (chairMutex) {
-            queueSpace.decrementAndGet();
-        }
-    }
-
-    public void incSpace() {
-        synchronized (chairMutex) {
-            queueSpace.incrementAndGet();
-        }
-    }
 
     public boolean hasWaitingCustomers() {
         synchronized (chairMutex) {

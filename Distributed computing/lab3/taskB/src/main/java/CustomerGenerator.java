@@ -2,7 +2,7 @@ import java.util.concurrent.*;
 
 public class CustomerGenerator implements Runnable {
     private Barbershop barbershop;
-    private ExecutorService executorService = Executors.newFixedThreadPool(100);
+    private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     public CustomerGenerator(Barbershop barbershop) {
         this.barbershop = barbershop;

@@ -13,7 +13,4 @@ public class Config {
         public static int workTime = 5000;
     }
 
-    public static class Barbershop {
-        public static int queueCapacity = 10;
-    }
 }
