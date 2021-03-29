@@ -28,6 +28,9 @@ public class Manager {
             
         });
         Simulation simulation = new Simulation(buffer, barrier, ROWS, COLUMNS);
+
+
+
         Drawing drawing = new Drawing(buffer, cell_size);
         JFrame frame = new JFrame();
         frame.setSize((COLUMNS) * cell_size, (ROWS + 3) * cell_size);
