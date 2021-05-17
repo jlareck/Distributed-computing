@@ -7,21 +7,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.util.Map;
 
 import javax.swing.Box;
-import javax.swing.ButtonGroup;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
-import org.xml.sax.SAXException;
 
 public class UserInterface extends JFrame{
     private static Client client = null;
@@ -293,7 +288,7 @@ public class UserInterface extends JFrame{
         tfFileSize.setText(String.valueOf(cCt.getSize()));
     }
 
-    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+    public static void main(String[] args) throws IOException {
         client = new Client("localhost",12345);
         JFrame myWindow = new UserInterface();
         myWindow.setVisible(true);
