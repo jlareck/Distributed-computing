@@ -49,7 +49,7 @@ public class UserInterface extends JFrame{
     private static JFrame frame;
 
     UserInterface(){
-        super("World Map");
+        super("File system");
         frame = this;
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
