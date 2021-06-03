@@ -1,6 +1,11 @@
 package extendedeuclidian;
 import java.math.BigInteger;
 public class ExtendedEuclidean {
+
+    /*
+     * Finds GCD (Greatest Common Divisor) of x and y, as well as Bezout coefficients a and b:
+     * ax + by = gcd(x, y)
+     */
     public static class ExtendedEuclideanResult {
         BigInteger coefficientBezoutX;
         BigInteger coefficientBezoutY;
@@ -33,7 +38,8 @@ public class ExtendedEuclidean {
 
         ExtendedEuclideanResult gcdResult = compute(b.mod(a), a);
         ExtendedEuclideanResult result =  new ExtendedEuclideanResult(
-                gcdResult.coefficientBezoutY.subtract(b.divide(a).multiply(gcdResult.coefficientBezoutX)), //1 - (x1 * b / a)
+                //1 - (x1 * b / a)
+                gcdResult.coefficientBezoutY.subtract(b.divide(a).multiply(gcdResult.coefficientBezoutX)),
                 gcdResult.coefficientBezoutX,
                 gcdResult.gcd
         );

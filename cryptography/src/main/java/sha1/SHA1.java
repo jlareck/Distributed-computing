@@ -75,7 +75,6 @@ public class SHA1 {
 
     }
 
-    //create complete message
     public static String createMessageLength(String message, String paddedOne, int zeros, String endLength) {
 
         StringBuilder messageBinary = new StringBuilder(message);
