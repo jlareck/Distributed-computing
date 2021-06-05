@@ -1,6 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.regex.Pattern;
 public class Utils {
     private static final List<String> specialReservedWords = Arrays.asList(
             "abstract", "case", "catch", "class", "def",
@@ -13,15 +13,30 @@ public class Utils {
             "val", "var", "while", "with", "yield",
             "_", ":", "=", "=>", "<-",
             "<:", "<%", ">:", "#", "@"
-
     );
     public static boolean isParentheses(Character c) {
-        // || c == ';' || c == ',' || c=='.'
         return c == '(' || c == ')' || c == '{' || c == '}' || c == '[' || c == ']';
     }
     public static boolean isDelimiterCharacters (Character c) {
-        // || c == ';' || c == ',' || c=='.'
         return c == '`' || c == ';' || c == '\"'  || c == ',' || c =='.' || c == '\'';
     }
+    public static boolean isBinary(Character c) {
+        return c == '0' || c == '1';
+    }
 
+    public static boolean isHex(Character c) {
+        return Pattern.matches("\\d|[a-fA-F]", c.toString());
+    }
+
+    public static boolean isDoubleOrFloat(Character c) {
+        return c == 'f' || c == 'F' || c == 'd' || c == 'D';
+    }
+
+    public static boolean isBooleanLiteral(String str) {
+        return "true".equals(str) || "false".equals(str);
+    }
+
+    public static boolean specialReservedWords(String str) {
+        return specialReservedWords.contains(str);
+    }
 }

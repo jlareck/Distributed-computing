@@ -14,6 +14,7 @@ class someAnotation extends scala.annotation.Annotation
 object ExampleScala extends App {
   var floatValue = 5.21 // comment
   val sum = 5.21 + 3
+  val newValue = 5 / 2 - 4 * 3
   sum match {
     case _ > 0 => print("more than zero")
     case _ => print(s"$sum less or equal to zero")
