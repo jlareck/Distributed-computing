@@ -1,4 +1,3 @@
-import javax.swing.plaf.nimbus.State;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class Lexer {
             }
             else if (character == '@') {
                 addToken(buffer.toString(), Type.IDENTIFIER);
-                addToBuffer(character, States.ANNOTATION_SIGN);
+                addToBuffer(character, States.AT_SIGN);
                 return;
             }
             else {
@@ -102,6 +101,33 @@ public class Lexer {
             }
             state = States.INITIAL;
             indexOfLetter--;
+        }
+    }
+    // #
+    private void poundSignState(Character character) {
+        if (Character.isJavaIdentifierStart(character)) {
+            addToken(buffer.toString(), Type.RESERVED_WORDS);
+            addToBuffer(character, States.IDENTIFIER_LITERAL);
+        }
+        else if (character == '`') {
+            addToken(buffer.toString(), Type.RESERVED_WORDS);
+            addToBuffer(character, States.IDENTIFIER_LITERAL);
+        }
+        else if (Character.isWhitespace(character)) {
+            addToken(buffer.toString(), Type.RESERVED_WORDS);
+            initialState(character);
+        }
+        else if(Utils.isSpecialCharacter(character) || Utils.isOperator(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+    }
+    private void defineMethodState(Character character) {
+        if (Utils.isSpecialCharacter(character) || Utils.isOperator(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+        else {
+            addToken(buffer.toString(), Type.DEFINED_METHOD);
+            initialState(character);
         }
     }
 
@@ -147,12 +173,39 @@ public class Lexer {
             addToBuffer(character, States.STRING_LITERAL);
         }
     }
+    private void possibleEscapeSequenceState(Character character) {
+        if(Utils.isEscapeCharacter("\\" + character)) {
+            addToBuffer(character, States.STRING_LITERAL);
+            state = States.STRING_LITERAL;
+        } else {
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.ERROR);
+        }
+    }
     private void characterLiteralState(Character character) {
         if (character == '\\') {
-            state = States.POSSIBLE_ESCAPE_SEQUENCE_CHAR;
+            addToBuffer(character, States.POSSIBLE_ESCAPE_SEQUENCE_CHAR);
         }
         else {
-            state = States.EXPECT_END_OF_CHAR;
+            addToBuffer(character, States.EXPECT_END_OF_CHAR);
+        }
+    }
+    private void possibleEscapeSequenceCharState(Character character) {
+        if (Utils.isEscapeCharacter("\\" + character)) {
+            addToBuffer(character, States.EXPECT_END_OF_CHAR);
+        } else {
+            addToBuffer(character, States.INITIAL);
+            addToken(character, Type.ERROR);
+        }
+    }
+    private void expectEndOfCharState(Character character) {
+        if(character=='\'') {
+            addToBuffer(character, States.INITIAL);
+            addToken(character, Type.CHAR_LITERAL);
+            state = States.INITIAL;
+        } else {
+            addToken(character, Type.ERROR);
+            state = States.INITIAL;
         }
     }
 
@@ -247,6 +300,137 @@ public class Lexer {
         }
     }
 
+    private void operatorAndEqualState(Character character) {
+        if(Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character,States.DEFINE_METHOD);
+        }
+        else {
+            addToken(buffer.toString(), Type.OPERATOR);
+            addToBuffer(character, States.INITIAL);
+        }
+    }
+
+    private void pointInDigitState(Character character) {
+        if (Character.isDigit(character)) {
+            addToBuffer(character, States.POINT_IN_DIGIT);
+        }
+        else if(Utils.isDoubleOrFloat(character)) {
+            addToBuffer(character, States.FLOAT_SUFFIX);
+        }
+        else if (Character.isJavaIdentifierPart(character) || character=='.') {
+            addToBuffer(character, States.INITIAL);
+            addToken(character, Type.ERROR);
+        }
+        else {
+            addToken(character, Type.FLOAT_LITERAL);
+            state = States.INITIAL;
+            initialState(character);
+        }
+    }
+
+    private void zeroDigitState(Character character) {
+        if (character == '.') {
+            addToBuffer(character, States.POINT_IN_DIGIT);
+        }
+        else if (Utils.isDoubleOrFloat(character)) {
+            addToBuffer(character, States.FLOAT_SUFFIX);
+        }
+        else if (character == 'x' || character == 'X') {
+            addToBuffer(character, States.HEX_DIGITS);
+        }
+        else if (character == 'l' || character == 'L') {
+            addToBuffer(character, States.INTEGER_SUFFIX);
+        }
+        else if (Character.isJavaIdentifierPart(character) || Character.isDigit(character)) {
+            invalidState(character);
+        }
+        else {
+            addToken(buffer.toString(), Type.INT_LITERAL);
+        }
+    }
+    private void integerSuffixState(Character character) {
+        if (Character.isJavaIdentifierPart(character)) {
+            addToBuffer(character, States.ERROR);
+
+        } else {
+            addToken(buffer.toString(), Type.INT_LITERAL);
+            state = States.INITIAL;
+            initialState(character);
+        }
+    }
+
+    private void floatSuffixState(Character character) {
+        if (Character.isJavaIdentifierPart(character)) {
+            addToBuffer(character, States.ERROR);
+        } else {
+            addToken(character, Type.FLOAT_LITERAL);
+            state = States.INITIAL;
+            initialState(character);
+        }
+    }
+    private void nonZeroDigitState(Character character) {
+        if (Character.isDigit(character)) {
+            addToBuffer(character, States.NON_ZERO_DIGIT);
+        }
+        else if (character == '.') {
+            addToBuffer(character, States.POINT_IN_DIGIT);
+        }
+        else if (character == 'l' || character == 'L') {
+            addToBuffer(character, States.INTEGER_SUFFIX);
+        }
+        else if (character == 'f' || character == 'F') {
+            addToBuffer(character, States.FLOAT_SUFFIX);
+        }
+        else if (Character.isJavaIdentifierPart(character)) {
+            invalidState(character);
+        }
+        else {
+            addToken(buffer.toString(), Type.INT_LITERAL);
+        }
+    }
+
+    private void atSignState(Character character) {
+        if (character == '@') {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+        else {
+            if (!Character.isDigit(character) && !Character.isLetter(character)
+            && !Character.isWhitespace(character)) {
+                addToBuffer(character, States.DEFINE_METHOD);
+            }
+            else {
+                addToken(character, Type.RESERVED_WORDS);
+                initialState(character);
+            }
+        }
+    }
+
+    private void singleLineCommentState(Character character) {
+        if(Character.isWhitespace(character) && character!= '\t' && character!=' ') {
+            addToken(buffer.toString(), Type.COMMENT);
+            state = States.INITIAL;
+            initialState(character);
+        } else {
+            addToBuffer(character, States.SINGLE_LINE_COMMENT);
+        }
+    }
+
+    private void multilineCommentState(Character character) {
+        if(character=='*') {
+            addToBuffer(character, States.STAR_IN_MULTI_LINE_COMMENT);
+        } else {
+            addToBuffer(character, States.MULTI_LINE_COMMENT);
+        }
+    }
+
+    private void starInMultilineCommentState(Character character) {
+        if(character=='/') {
+            addToBuffer(character, States.INITIAL);
+            addToken(character, Type.COMMENT);
+        } else {
+            addToBuffer(character, States.MULTI_LINE_COMMENT);
+        }
+    }
 
     private void initialState(Character character) {
 
@@ -299,21 +483,23 @@ public class Lexer {
         else if (character == '|') {
             addToBuffer(character, States.PIPE);
         }
+        else if (character == '0') {
+            addToBuffer(character, States.ZERO_FIRST);
+        }
         else if (Character.isDigit(character)) {
-            addToBuffer(character, States.DIGIT);
+            addToBuffer(character, States.NON_ZERO_DIGIT);
         }
         else if (Character.isWhitespace(character)) {
             addToken(character, Type.WHITESPACE);
         }
         else if (character == '#') {
-            addToBuffer(character, States.POUND_SIGN);
+            invalidState(character);
         }
         else if (character == '@') {
             addToBuffer(character, States.AT_SIGN);
         }
         else {
             addToBuffer(character, States.ERROR);
-
         }
     }
 

@@ -15,7 +15,7 @@ public class Utils {
             "<:", "<%", ">:", "#", "@"
     );
 
-    
+
 
     public static boolean isParentheses(Character c) {
         return c == '(' || c == ')' || c == '{' || c == '}' || c == '[' || c == ']';
@@ -23,8 +23,8 @@ public class Utils {
     public static boolean isDelimiterCharacters (Character c) {
         return c == '`' || c == ';' || c == '\"'  || c == ',' || c =='.' || c == '\'';
     }
-    public static boolean isBinary(Character c) {
-        return c == '0' || c == '1';
+    public static boolean isEscapeCharacter(String str) {
+        return "\\b".equals(str) || "\\t".equals(str) || "\\n".equals(str) || "\\".equals(str) || "'".equals(str) || "\"".equals(str) || "\\r".equals(str) || "\\f".equals(str);
     }
     public static boolean isOperator(Character c) {
         return c == '=' || c == '>' || c == '<' || c == '!' || c == '~' || c == ':' || c == '?' || c == '&' || c == '|' || c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '%';
