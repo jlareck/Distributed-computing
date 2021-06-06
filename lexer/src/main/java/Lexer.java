@@ -134,7 +134,119 @@ public class Lexer {
         initialState(c);
     }
 
-    private void
+    private void stringLiteralState(Character character) {
+        if(character=='\\') {
+            state = States.POSSIBLE_ESCAPE_SEQUENCE;
+        }
+        else if (character=='\"') {
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.STRING_LITERAL);
+            state = States.INITIAL;
+        }
+        else {
+            addToBuffer(character, States.STRING_LITERAL);
+        }
+    }
+    private void characterLiteralState(Character character) {
+        if (character == '\\') {
+            state = States.POSSIBLE_ESCAPE_SEQUENCE_CHAR;
+        }
+        else {
+            state = States.EXPECT_END_OF_CHAR;
+        }
+    }
+
+    private void dotState(Character character) {
+        if (Character.isDigit(character)) {
+            addToBuffer(character, States.POINT_IN_DIGIT);
+        }
+        else {
+            addToken(character, Type.DELIMITER_CHARACTER);
+            indexOfLetter--;
+            state = States.INITIAL;
+        }
+    }
+    private void greaterState(Character character) {
+        if (character == ':') {
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.RESERVED_WORDS);
+            state = States.INITIAL;
+        }
+        else  {
+            addToken(buffer.toString(), Type.OPERATOR);
+            state = States.INITIAL;
+            indexOfLetter--;
+        }
+    }
+
+    private void lessState(Character character) {
+        if (character == ':' || character == '-') {
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.RESERVED_WORDS);
+            state = States.INITIAL;
+        }
+        else  {
+            addToken(buffer.toString(), Type.OPERATOR);
+            state = States.INITIAL;
+            indexOfLetter--;
+        }
+    }
+    private void singleOperatorState(Character character) {
+        if(character=='=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        } else if (Utils.isOperator(character)) {
+            addToBuffer(character, States.ERROR);
+            addToken(buffer.toString(), Type.ERROR);
+            state = States.INITIAL;
+        } else {
+            addToken(buffer.toString(), Type.OPERATOR);
+            state = States.INITIAL;
+            indexOfLetter--;
+        }
+    }
+
+    private void plusState(Character character) {
+        if (character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        }
+        else if (Utils.isOperator(character)) {
+            addToBuffer(character, States.IDENTIFIER_OPERATOR);
+        }
+        else {
+            addToken(buffer.toString(), Type.OPERATOR);
+            indexOfLetter--;
+            state = States.INITIAL;
+        }
+    }
+    private void minusState(Character character) {
+        if (character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        }
+        else if (Utils.isOperator(character)) {
+            addToBuffer(character, States.IDENTIFIER_OPERATOR);
+        }
+        else {
+            addToken(buffer.toString(), Type.OPERATOR);
+            indexOfLetter--;
+            state = States.INITIAL;
+        }
+    }
+
+    private void pipeState(Character character) {
+        if (character == '|') {
+            addToBuffer(character, States.DOUBLE_PIPE);
+        }
+        else if (character == '=') {
+            // need to handle def |+==== ()
+            addToBuffer(character, States.PIPE_AND_EQ);
+        }
+        else {
+            addToken(character, Type.OPERATOR);
+            indexOfLetter--;
+            state = States.INITIAL;
+        }
+    }
+
 
     private void initialState(Character character) {
 
@@ -147,7 +259,7 @@ public class Lexer {
         else if (character == '/') {
             addToBuffer(character, States.SLASH);
         }
-        else if (character == '\"') {
+        else if (character == '"') {
             addToBuffer(character, States.STRING_LITERAL);
 
         }
@@ -159,7 +271,8 @@ public class Lexer {
             addToBuffer(character,States.DOT);
         }
         else if (character == ':') {
-            addToBuffer(character, States.COLON);
+            addToken(character, Type.RESERVED_WORDS);
+            state = States.INITIAL;
         }
         else if (character == '>') {
             addToBuffer(character, States.GREATER);
@@ -189,11 +302,14 @@ public class Lexer {
         else if (Character.isDigit(character)) {
             addToBuffer(character, States.DIGIT);
         }
-        else if (character == ' ') {
+        else if (Character.isWhitespace(character)) {
             addToken(character, Type.WHITESPACE);
         }
         else if (character == '#') {
             addToBuffer(character, States.POUND_SIGN);
+        }
+        else if (character == '@') {
+            addToBuffer(character, States.AT_SIGN);
         }
         else {
             addToBuffer(character, States.ERROR);
