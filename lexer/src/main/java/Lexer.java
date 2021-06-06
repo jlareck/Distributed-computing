@@ -1,3 +1,5 @@
+import jdk.jshell.execution.Util;
+
 import javax.swing.plaf.nimbus.State;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -57,8 +59,10 @@ public class Lexer {
                     break;
                 }
                 case IDENTIFIER_NOT_LITERAL: {
-                    identifierState(c);
+                    identifierNotLiteralState(c);
+                    break;
                 }
+                case
             }
         }
     }
@@ -122,9 +126,16 @@ public class Lexer {
             addToBuffer(character, States.DEFINE_METHOD);
         }
     }
+    // in Scala we can define methods like def ++@++=-=():Unit = {}
+    // and we need also to handle them
     private void defineMethodState(Character character) {
         if (Utils.isSpecialCharacter(character) || Utils.isOperator(character)) {
             addToBuffer(character, States.DEFINE_METHOD);
+        }
+        else if (Character.isLetter(character) || Character.isDigit(character)) {
+            // def +-=+letters  is not valid
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.ERROR);
         }
         else {
             addToken(buffer.toString(), Type.DEFINED_METHOD);
@@ -152,7 +163,6 @@ public class Lexer {
             state = States.INITIAL;
         }
     }
-
 
     private void invalidState(Character c) {
         addToBuffer(c, States.INITIAL);
@@ -187,6 +197,7 @@ public class Lexer {
             addToBuffer(character, States.CHARACTER_AFTER_QUOTES);
         }
     }
+    // case: """
     private void tripleQuotesState(Character character) {
         if (character == '"') {
             addToBuffer(character, States.END_OF_TRIPLE_QUOTES_1);
@@ -195,11 +206,28 @@ public class Lexer {
             addToBuffer(character, States.TRIPLE_QUOTES);
         }
     }
-    private void tripleQuotesEnd_1_State(Character character) {
+    // case: """"someInfo
+    private void tripleQuotesEnd1State(Character character) {
         if (character == '"') {
-            addToBuffer(character, States.);
+            addToBuffer(character, States.END_OF_TRIPLE_QUOTES_2);
+        }
+        else {
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.ERROR);
         }
     }
+    private void tripleQuotesEnd2State(Character character) {
+        if (character == '"') {
+            addToBuffer(character, States.INITIAL);
+            addToken(character,Type.STRING_LITERAL);
+        }
+        else {
+            addToBuffer(character, States.INITIAL);
+            addToken(buffer.toString(), Type.ERROR);
+        }
+    }
+
+
 
     private void possibleEscapeSequenceState(Character character) {
         if(Utils.isEscapeCharacter("\\" + character)) {
@@ -247,11 +275,21 @@ public class Lexer {
             state = States.INITIAL;
         }
     }
+
     private void greaterState(Character character) {
         if (character == ':') {
             addToBuffer(character, States.INITIAL);
             addToken(buffer.toString(), Type.RESERVED_WORDS);
             state = States.INITIAL;
+        }
+        else if (character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        }
+        else if (character == '>') {
+            addToBuffer(character, States.DOUBLE_GREATER);
+        }
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
         }
         else  {
             addToken(buffer.toString(), Type.OPERATOR);
@@ -260,11 +298,48 @@ public class Lexer {
         }
     }
 
+    private void doubleGreaterState(Character character) {
+        if(character=='>') {
+            addToBuffer(character, States.TRIPLE_GREATER);
+        }
+        else if (character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        }
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+        else {
+            addToken(buffer.toString(), Type.OPERATOR);
+            state = States.INITIAL;
+            initialState(character);
+        }
+    }
+    private void tripleGreaterState(Character character) {
+        if (Character.isDigit(character) || Character.isWhitespace(character)
+                || Character.isJavaIdentifierStart(character) || Utils.isDelimiterCharacters(character)) {
+            addToken(buffer.toString(), Type.OPERATOR);
+            initialState(character);
+        }
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+    }
+
+
     private void lessState(Character character) {
         if (character == ':' || character == '-') {
             addToBuffer(character, States.INITIAL);
             addToken(buffer.toString(), Type.RESERVED_WORDS);
             state = States.INITIAL;
+        }
+        else if (character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        }
+        else if (character == '<') {
+            addToBuffer(character, States.DOUBLE_LESS);
+        }
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
         }
         else  {
             addToken(buffer.toString(), Type.OPERATOR);
@@ -272,6 +347,33 @@ public class Lexer {
             indexOfLetter--;
         }
     }
+    private void doubleLessState(Character character) {
+        if(character=='<') {
+            addToBuffer(character, States.TRIPLE_LESS);
+        }
+        else if (character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
+        }
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+        else {
+            addToken(buffer.toString(), Type.OPERATOR);
+            state = States.INITIAL;
+            initialState(character);
+        }
+    }
+    private void tripleLessState(Character character) {
+        if (Character.isDigit(character) || Character.isWhitespace(character)
+                || Character.isJavaIdentifierStart(character) || Utils.isDelimiterCharacters(character)) {
+            addToken(buffer.toString(), Type.OPERATOR);
+            initialState(character);
+        }
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
+        }
+    }
+
     private void singleOperatorState(Character character) {
         if(character=='=') {
             addToBuffer(character, States.OPERATOR_AND_EQUAL);
@@ -356,7 +458,7 @@ public class Lexer {
         }
     }
 
-    private void zeroDigitState(Character character) {
+    private void zeroFirstState(Character character) {
         if (character == '.') {
             addToBuffer(character, States.POINT_IN_DIGIT);
         }
@@ -473,7 +575,6 @@ public class Lexer {
         }
         else if (character == '"') {
             addToBuffer(character, States.STRING_LITERAL);
-
         }
         else if (character == '\'') {
             addToken(character, Type.DELIMITER_CHARACTER);
@@ -525,6 +626,9 @@ public class Lexer {
         }
         else if (character == '@') {
             addToBuffer(character, States.AT_SIGN);
+        }
+        else if (character == '_') {
+            addToken(character, Type.RESERVED_WORDS);
         }
         else {
             addToBuffer(character, States.ERROR);

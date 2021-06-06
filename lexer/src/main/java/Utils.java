@@ -30,7 +30,7 @@ public class Utils {
         return c == '=' || c == '>' || c == '<' || c == '!' || c == '~' || c == ':' || c == '?' || c == '&' || c == '|' || c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '%';
     }
     public static boolean isSpecialCharacter(Character c) {
-        return c == '#' || c == '@';
+        return c == '#' || c == '@' || c == '_';
     }
     public static boolean isHex(Character c) {
         return Pattern.matches("\\d|[a-fA-F]", c.toString());
