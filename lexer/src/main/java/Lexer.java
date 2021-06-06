@@ -1,3 +1,4 @@
+import javax.swing.plaf.nimbus.State;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -165,14 +166,41 @@ public class Lexer {
             state = States.POSSIBLE_ESCAPE_SEQUENCE;
         }
         else if (character=='\"') {
-            addToBuffer(character, States.INITIAL);
-            addToken(buffer.toString(), Type.STRING_LITERAL);
+            addToBuffer(character, States.DOUBLE_QUOTES);
+        }
+        else if (Character.isWhitespace(character)&&
+                character!='\t' && character != ' ') {
+            addToken(buffer.toString(), Type.ERROR);
             state = States.INITIAL;
+            initialState(character);
         }
         else {
             addToBuffer(character, States.STRING_LITERAL);
         }
     }
+    // case: """triple quotes"""
+    private void doubleQuotesState(Character character) {
+        if(character == '"') {
+            addToBuffer(character, States.TRIPLE_QUOTES);
+        }
+        else {
+            addToBuffer(character, States.CHARACTER_AFTER_QUOTES);
+        }
+    }
+    private void tripleQuotesState(Character character) {
+        if (character == '"') {
+            addToBuffer(character, States.END_OF_TRIPLE_QUOTES_1);
+        }
+        else {
+            addToBuffer(character, States.TRIPLE_QUOTES);
+        }
+    }
+    private void tripleQuotesEnd_1_State(Character character) {
+        if (character == '"') {
+            addToBuffer(character, States.);
+        }
+    }
+
     private void possibleEscapeSequenceState(Character character) {
         if(Utils.isEscapeCharacter("\\" + character)) {
             addToBuffer(character, States.STRING_LITERAL);
