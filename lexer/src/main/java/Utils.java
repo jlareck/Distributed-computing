@@ -11,7 +11,7 @@ public class Utils {
             "protected", "return", "sealed", "super", "this",
             "throw", "trait", "try", "type",
             "val", "var", "while", "with", "yield",
-            "_", ":", "=", "=>", "<-",
+            "_", ":", "=>", "<-",
             "<:", "<%", ">:", "#", "@"
     );
     public static boolean isParentheses(Character c) {
@@ -23,7 +23,12 @@ public class Utils {
     public static boolean isBinary(Character c) {
         return c == '0' || c == '1';
     }
-
+    public static boolean isOperator(Character c) {
+        return c == '=' || c == '>' || c == '<' || c == '!' || c == '~' || c == ':' || c == '?' || c == '&' || c == '|' || c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '%';
+    }
+    public static boolean isSpecialCharacter(Character c) {
+        return c == '#' || c == '@';
+    }
     public static boolean isHex(Character c) {
         return Pattern.matches("\\d|[a-fA-F]", c.toString());
     }
