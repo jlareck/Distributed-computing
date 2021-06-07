@@ -30,7 +30,6 @@ public class Lexer {
         Reader reader = new InputStreamReader(inputStream, Charset.defaultCharset());
         BufferedReader bufferedReader = new BufferedReader(reader);
         StringBuilder stringBuilder = new StringBuilder();
-
         String line = "";
         while (true) {
             try {
@@ -40,9 +39,7 @@ public class Lexer {
             }
             stringBuilder.append(line);
         }
-
         inputText = stringBuilder.toString().toCharArray();
-
         System.out.println(inputText);
     }
 
@@ -62,9 +59,151 @@ public class Lexer {
                     identifierNotLiteralState(c);
                     break;
                 }
-                case
+                case SLASH: {
+                    slashState(c);
+                    break;
+                }
+                case POUND_SIGN: {
+                    poundSignState(c);
+                    break;
+                }
+                case IDENTIFIER_LITERAL: {
+                    identifierLiteralState(c);
+                    break;
+                }
+                case ZERO_FIRST: {
+                    zeroFirstState(c);
+                    break;
+                }
+                case CHAR_LITERAL: {
+                    characterLiteralState(c);
+                    break;
+                }
+                case STRING_LITERAL: {
+                    stringLiteralState(c);
+                    break;
+                }
+                case DOT: {
+                    dotState(c);
+                    break;
+                }
+                case GREATER: {
+                    greaterState(c);
+                    break;
+                }
+                case LESS: {
+                    lessState(c);
+                    break;
+                }
+                case AT_SIGN: {
+                    atSignState(c);
+                    break;
+                }
+                case  END_OF_TRIPLE_QUOTES_1:{
+                    tripleQuotesEnd1State(c);
+                    break;
+                }
+                case END_OF_TRIPLE_QUOTES_2: {
+                    tripleQuotesEnd2State(c);
+                    break;
+                }
+                case DOUBLE_QUOTES: {
+                    doubleQuotesState(c);
+                    break;
+                }
+                case TRIPLE_QUOTES: {
+                    tripleQuotesState(c);
+                    break;
+                }
+                case SINGLE_OPERATOR: {
+                    singleOperatorState(c);
+                    break;
+                }
+                case PLUS: {
+                    plusState(c);
+                    break;
+                }
+                case MINUS: {
+                    minusState(c);
+                    break;
+                }
+                case PIPE: {
+                    pipeState(c);
+                    break;
+                }
+                case SINGLE_LINE_COMMENT: {
+                    singleLineCommentState(c);
+                    break;
+                }
+                case MULTI_LINE_COMMENT: {
+                    multilineCommentState(c);
+                    break;
+                }
+                case HEX_DIGITS: {
+                    hexDigitState(c);
+                    break;
+                }
+                case INTEGER_SUFFIX: {
+                    integerSuffixState(c);
+                    break;
+                }
+                case NON_ZERO_DIGIT: {
+                    nonZeroDigitState(c);
+                    break;
+                }
+                case DEFINE_METHOD: {
+                    defineMethodState(c);
+                    break;
+                }
+                case POINT_IN_DIGIT: {
+                    pointInDigitState(c);
+                    break;
+                }
+                case POSSIBLE_ESCAPE_SEQUENCE: {
+                    possibleEscapeSequenceState(c);
+                    break;
+                }
+                case POSSIBLE_ESCAPE_SEQUENCE_CHAR: {
+                    possibleEscapeSequenceCharState(c);
+                    break;
+                }
+                case EXPECT_END_OF_CHAR: {
+                    expectEndOfCharState(c);
+                    break;
+                }
+                case DOUBLE_GREATER: {
+                    doubleGreaterState(c);
+                    break;
+                }
+                case OPERATOR_AND_EQUAL: {
+                    operatorAndEqualState(c);
+                    break;
+                }
+                case STAR_IN_MULTI_LINE_COMMENT: {
+                    starInMultilineCommentState(c);
+                    break;
+                }
+                case FLOAT_SUFFIX: {
+                    floatSuffixState(c);
+                    break;
+                }
+                case DOUBLE_LESS: {
+                    doubleLessState(c);
+                    break;
+                }
+                case TRIPLE_GREATER: {
+                    tripleGreaterState(c);
+                    break;
+                }
+                case TRIPLE_LESS: {
+                    tripleLessState(c);
+                    break;
+                }
+
             }
+            indexOfLetter++;
         }
+        return tokens;
     }
     private void identifierLiteralState(Character character) {
         if (character != '`') {
@@ -188,13 +327,14 @@ public class Lexer {
             addToBuffer(character, States.STRING_LITERAL);
         }
     }
-    // case: """triple quotes"""
+    // case: ""some info
     private void doubleQuotesState(Character character) {
         if(character == '"') {
             addToBuffer(character, States.TRIPLE_QUOTES);
         }
         else {
-            addToBuffer(character, States.CHARACTER_AFTER_QUOTES);
+            addToken(buffer.toString(), Type.STRING_LITERAL);
+            initialState(character);
         }
     }
     // case: """
@@ -227,7 +367,25 @@ public class Lexer {
         }
     }
 
-
+    private void hexDigitState(Character character) {
+        if(Utils.isHex(character)) {
+            addToBuffer(character, States.HEX_DIGITS);
+        }
+        else if(character=='l' || character=='L') {
+            addToBuffer(character, States.INTEGER_SUFFIX);
+        }
+        else if (character=='f' || character=='F') {
+            addToBuffer(character, States.FLOAT_SUFFIX);
+        }
+        else if (Character.isJavaIdentifierPart(character)) {
+            invalidState(character);
+        }
+        else {
+            addToken(buffer.toString(), Type.INT_LITERAL);
+            state = States.INITIAL;
+            initialState(character);
+        }
+    }
 
     private void possibleEscapeSequenceState(Character character) {
         if(Utils.isEscapeCharacter("\\" + character)) {
@@ -392,8 +550,8 @@ public class Lexer {
         if (character == '=') {
             addToBuffer(character, States.OPERATOR_AND_EQUAL);
         }
-        else if (Utils.isOperator(character)) {
-            addToBuffer(character, States.IDENTIFIER_OPERATOR);
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
         }
         else {
             addToken(buffer.toString(), Type.OPERATOR);
@@ -405,8 +563,8 @@ public class Lexer {
         if (character == '=') {
             addToBuffer(character, States.OPERATOR_AND_EQUAL);
         }
-        else if (Utils.isOperator(character)) {
-            addToBuffer(character, States.IDENTIFIER_OPERATOR);
+        else if (Utils.isOperator(character) || Utils.isSpecialCharacter(character)) {
+            addToBuffer(character, States.DEFINE_METHOD);
         }
         else {
             addToken(buffer.toString(), Type.OPERATOR);
@@ -416,12 +574,8 @@ public class Lexer {
     }
 
     private void pipeState(Character character) {
-        if (character == '|') {
-            addToBuffer(character, States.DOUBLE_PIPE);
-        }
-        else if (character == '=') {
-            // need to handle def |+==== ()
-            addToBuffer(character, States.PIPE_AND_EQ);
+        if (character == '|' || character == '=') {
+            addToBuffer(character, States.OPERATOR_AND_EQUAL);
         }
         else {
             addToken(character, Type.OPERATOR);
