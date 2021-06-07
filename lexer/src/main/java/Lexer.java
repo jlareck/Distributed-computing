@@ -6,15 +6,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 public class Lexer {
-    String fileName;
     char[] inputText;
     int indexOfLetter = 0;
     States state = States.INITIAL;
     private StringBuilder buffer;
     private List<Token> tokens;
 
-    public Lexer(String fileName) {
-        this.fileName = fileName;
+    public Lexer() {
         tokens = new ArrayList<>();
         buffer = new StringBuilder();
     }
@@ -223,7 +221,7 @@ public class Lexer {
             addToBuffer(character, States.IDENTIFIER_NOT_LITERAL);
         }
         else if (Character.isWhitespace(character) || Utils.isOperator(character) ||
-                Utils.isParentheses(character) || Utils.isSpecialCharacter(character)) {
+                Utils.isParentheses(character) || Utils.isSpecialCharacter(character) || Utils.isDelimiterCharacters(character)) {
             if (Utils.specialReservedWords(buffer.toString())) {
                 addToken(buffer.toString(), Type.RESERVED_WORDS);
             }
@@ -243,9 +241,10 @@ public class Lexer {
             else {
                 addToken(buffer.toString(), Type.IDENTIFIER);
             }
-            state = States.INITIAL;
-            indexOfLetter--;
+            initialState(character);
+
         }
+
     }
     // #
     private void poundSignState(Character character) {
@@ -428,7 +427,7 @@ public class Lexer {
             addToBuffer(character, States.POINT_IN_DIGIT);
         }
         else {
-            addToken(character, Type.DELIMITER_CHARACTER);
+            addToken(buffer.toString(), Type.DELIMITER_CHARACTER);
             indexOfLetter--;
             state = States.INITIAL;
         }
@@ -721,6 +720,7 @@ public class Lexer {
         if (Character.isJavaIdentifierStart(character)) {
             addToBuffer(character, States.IDENTIFIER_NOT_LITERAL);
         }
+
         else if (character == '`') {
             addToBuffer(character, States.IDENTIFIER_LITERAL);
         }
@@ -791,18 +791,15 @@ public class Lexer {
 
 
     private void addToBuffer(char c, States state) {
-        System.out.println("Add buffer " + c + " " + state);
         buffer.append(c);
         this.state = state;
     }
     private void addToken(char c, Type type) {
-        System.out.println("Add token " + c + " " + type);
         tokens.add(new Token(Character.toString(c), type));
         buffer = new StringBuilder();
     }
 
     private void addToken(String c, Type type) {
-        System.out.println("Add token " + c + " " + type);
         tokens.add(new Token(c, type));
         buffer = new StringBuilder();
     }

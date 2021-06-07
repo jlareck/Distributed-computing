@@ -1,17 +1,17 @@
 public class Token {
 
-    public String tokenStr;
+    public String token;
     public Type type;
 
-    public Token(String tokenStr, Type type) {
-        this.tokenStr = tokenStr;
+    public Token(String token, Type type) {
+        this.token = token;
         this.type = type;
     }
 
     public String toString() {
         return "Token{" +
                 "type=" + type +
-                ", tokenString='" + tokenStr + '\'' +
+                ", tokenString='" + token + '\'' +
                 '}';
     }
 
