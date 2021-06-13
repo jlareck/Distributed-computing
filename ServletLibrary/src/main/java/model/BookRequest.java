@@ -8,9 +8,9 @@ public class BookRequest {
     private long bookId;
     private boolean isAccepted;
 
-    public BookRequest(long id_user, long id_book, boolean accepted) {
-        userId = id_user;
-        bookId = id_book;
+    public BookRequest(long userId, long bookId, boolean accepted) {
+        userId = userId;
+        bookId = bookId;
         isAccepted = accepted;
     }
 }

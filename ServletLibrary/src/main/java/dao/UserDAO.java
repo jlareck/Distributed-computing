@@ -5,7 +5,7 @@ import model.*;
 import java.sql.*;
 import java.util.ArrayList;
 public class UserDAO {
-    static public ArrayList<User> getUserFromDB(String login, String password, int isAdmin) throws InterruptedException, SQLException {
+    static public ArrayList<User> getUserFromDB(String login, String password)  {
         ArrayList<User> users = new ArrayList<>();
         ConnectionPool pool = ConnectionPool.getConnectionPool();
         try(Connection connection = pool.getConnection()) {

@@ -34,7 +34,7 @@ public class BookDAO {
         return books;
     }
 
-    static public boolean takeBook(long bookId) throws InterruptedException{
+    static public boolean takeBook(long bookId) {
         boolean book_taken = false;
         Connection connection;
         try {
@@ -57,7 +57,7 @@ public class BookDAO {
                 }
             }
             connection.close();
-        } catch (SQLException e) {
+        } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }
         return book_taken;

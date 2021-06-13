@@ -50,17 +50,17 @@ public class ReadingDAO {
         }
     }
 
-    static public boolean deleteReading(long id_user, long id_book) {
+    static public boolean deleteReading(long userId, long bookId) {
         try {
-            if (getReadings(id_user, id_book).size() == 0) {
+            if (getReadings(userId, bookId).size() == 0) {
                 return false;
             }
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
             String sqlQuery = "DELETE FROM reading WHERE id_user = ? AND id_book = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1, id_user);
-            pstmt.setLong(2, id_book);
+            pstmt.setLong(1, userId);
+            pstmt.setLong(2, bookId);
             pstmt.executeUpdate();
             connection.close();
             return true;
