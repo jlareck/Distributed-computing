@@ -37,16 +37,4 @@ public class UserDAO {
         return null;
     }
 
-    public static void main(String[] args) {
-//        try {
-//            ArrayList<User> users = getUserFromDB(Constants.SELECT_ALL_INT, Constants.SELECT_ALL_STR, Constants.SELECT_ALL_STR, Constants.SELECT_ALL_INT);
-//            for (User user: users) {
-//                System.out.println(user.getName());
-//            }
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-
-    }
 }

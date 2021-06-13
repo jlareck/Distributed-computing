@@ -63,14 +63,14 @@ public class BookDAO {
         return book_taken;
     }
 
-    static public boolean returnBook(long id){
+    static public boolean returnBook(long bookId){
         boolean bookReturned = false;
         Connection connection;
         try {
             connection = ConnectionPool.getConnectionPool().getConnection();
             String sqlSelect = "SELECT amount FROM books WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(sqlSelect);
-            pstmt.setLong(1, id);
+            pstmt.setLong(1, bookId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 int amount = rs.getInt("amount");
@@ -78,7 +78,7 @@ public class BookDAO {
                 final String sqlUpdate = "UPDATE books SET amount = ? WHERE id = ?";
                 PreparedStatement st = connection.prepareStatement(sqlUpdate);
                 st.setInt(1, amount);
-                st.setLong(2, id);
+                st.setLong(2, bookId);
                 st.executeUpdate();
                 st.close();
                 bookReturned = true;
@@ -90,20 +90,4 @@ public class BookDAO {
         return bookReturned;
     }
 
-    public static void main(String[] args) {
-        // try {
-        // ArrayList<Book> books = getBooksFromDB(1, "");
-        // for (Book book : books) {
-        // System.out.println(book.getName());
-        // }
-        // // boolean wow = takeBook(2);
-        // // System.out.println(wow);
-        // // wow = returnBook(2);
-        // // System.out.println(wow);
-        // // returnBook(1);
-        // } catch (SQLException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-    }
 }
