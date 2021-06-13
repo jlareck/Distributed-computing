@@ -10,14 +10,14 @@ public class UserDAO {
         ConnectionPool pool = ConnectionPool.getConnectionPool();
         try(Connection connection = pool.getConnection()) {
             String sql =
-                    "SELECT * FROM employees WHERE login = ? AND password = ?";
+                    "SELECT * FROM users WHERE login = ? AND password = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, login);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
             User user = new User();
             if(rs.next()) {
-                user.setId(rs.getInt(1));
+                user.setId(rs.getLong(1));
                 user.setName(rs.getString(2));
                 user.setLastname(rs.getString(3));
                 user.setLogin(rs.getString(4));
