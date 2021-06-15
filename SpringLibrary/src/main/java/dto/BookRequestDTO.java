@@ -5,7 +5,7 @@ import models.*;
 
 @Data
 @NoArgsConstructor
-public class RequestBookDTO {
+public class BookRequestDTO {
     private long id;
     private User user;
     private Book book;
