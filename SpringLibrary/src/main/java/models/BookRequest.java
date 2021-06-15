@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Builder
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "book_request")
 public class BookRequest {
     @Id
@@ -28,13 +29,6 @@ public class BookRequest {
     @Basic
     @Column(name = "accepted")
     private boolean isAccepted;
-
-
-    public BookRequest(long userId, long bookId, boolean accepted) {
-        userId = userId;
-        bookId = bookId;
-        isAccepted = accepted;
-    }
 
     public void setId(Long id) {
         this.id = id;
