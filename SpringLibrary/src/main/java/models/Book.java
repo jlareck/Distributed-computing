@@ -14,7 +14,8 @@ import javax.persistence.*;
 public class Book {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "id_books", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "id_books", sequenceName = "id_books", allocationSize = 1)
     private long id;
     @Basic
     @Column(name = "title")

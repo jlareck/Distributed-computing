@@ -15,16 +15,16 @@ import javax.persistence.*;
 public class BookRequest {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "id_requests", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "id_requests", sequenceName = "id_requests", allocationSize = 1)
     private Long id;
 
-    @Basic
-    @Column(name = "user_id")
-    private long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    @Basic
-    @Column(name ="book_id")
-    private long bookId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Book book;
+
     @Basic
     @Column(name = "accepted")
     private boolean isAccepted;

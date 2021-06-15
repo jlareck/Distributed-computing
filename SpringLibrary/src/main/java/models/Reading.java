@@ -15,24 +15,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Reading {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "id_reading", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "id_reading", sequenceName = "id_reading", allocationSize = 1)
+    @Column(name = "id", updatable = false)
+    private long id;
 
-    @Basic
-    @Column(name = "book_id")
-    private long bookId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    @Basic
-    @Column(name = "user_id")
-    private long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Book book;
 
-
-    public Reading(long userId, long bookId) {
-        this.bookId = bookId;
-        this.userId = userId;
-    }
 
     public void setId(Long id) {
         this.id = id;
