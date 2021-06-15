@@ -15,10 +15,10 @@ public class BookRequestDAO {
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
 
             final String sqlQuery = "SELECT * FROM request_handler WHERE id_user = ? AND id_book = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1, userId);
-            pstmt.setLong(2, bookId);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.setLong(1, userId);
+            prepareStatement.setLong(2, bookId);
+            ResultSet rs = prepareStatement.executeQuery();
             while (rs.next()) {
                 BookRequest book_request = new BookRequest(rs.getLong("id_user"), rs.getLong("id_book"),
                         rs.getBoolean("accepted"));
@@ -40,8 +40,8 @@ public class BookRequestDAO {
             //final String sqlQuery = "INSERT INTO request_handler (?, ?, ?) VALUES()";
             String sqlQuery = String.format("INSERT INTO request_handler (id_user, id_book, accepted) VALUES(%s, %s, %s)",
                     userId, bookId, false);
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.executeUpdate();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException | InterruptedException e) {
@@ -57,10 +57,10 @@ public class BookRequestDAO {
             }
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
             String sqlQuery = "DELETE FROM request_handler WHERE id_user = ? AND id_book = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1,userId);
-            pstmt.setLong(2, bookId);
-            pstmt.executeUpdate();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.setLong(1,userId);
+            prepareStatement.setLong(2, bookId);
+            prepareStatement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException | InterruptedException e) {
@@ -76,10 +76,10 @@ public class BookRequestDAO {
             }
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
             String sqlQuery = "UPDATE request_handler SET accepted = 'true' WHERE id_user = ? AND id_book = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1, userId);
-            pstmt.setLong(2, bookId);
-            pstmt.executeUpdate();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.setLong(1, userId);
+            prepareStatement.setLong(2, bookId);
+            prepareStatement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException | InterruptedException e) {

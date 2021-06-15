@@ -9,9 +9,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ConnectionPool {
     private static ConnectionPool connectionPool = new ConnectionPool();
 
-    private final String url = "jdbc:postgresql://localhost:5432/development_team";
-    private final String user = "postgres";
-    private final String password = "password";
+    private final String url = "jdbc:postgresql://localhost:5432/";
+    private final String user = "newuser";
+    private final String password = "";
     private final int MAX_CONNECTIONS = 8;
 
     private BlockingQueue<Connection> connections;

@@ -27,7 +27,7 @@ public class LibrarianServlet extends HttpServlet {
             case Action.ACCEPT_BOOK:
                 BookRequestDAO.acceptRequest(act.get("id_user").getAsInt(), act.get("id_book").getAsInt());
                 break;
-            case Action.LIST_REQUESTS: {
+            case Action.REQUESTS_LIST: {
                 ArrayList<BookRequest> reqs = BookRequestDAO.getBookRequests(Constants.SELECT_ALL_INT,
                         Constants.SELECT_ALL_INT);
                 String jsonReqs = new Gson().toJson(reqs);

@@ -16,9 +16,9 @@ public class BookDAO {
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
 
             String sqlQuery = "SELECT * FROM books WHERE title = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setString(1, name);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.setString(1, name);
+            ResultSet rs = prepareStatement.executeQuery();
 
             while (rs.next()) {
                 Book book = new Book();
@@ -40,9 +40,9 @@ public class BookDAO {
         try {
             connection = ConnectionPool.getConnectionPool().getConnection();
             final String sqlSelect = "SELECT * FROM books WHERE id = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sqlSelect);
-            pstmt.setLong(1, bookId);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlSelect);
+            prepareStatement.setLong(1, bookId);
+            ResultSet rs = prepareStatement.executeQuery();
             if (rs.next()) {
                 int amount = rs.getInt("amount");
                 if (amount != 0) {
@@ -69,9 +69,9 @@ public class BookDAO {
         try {
             connection = ConnectionPool.getConnectionPool().getConnection();
             String sqlSelect = "SELECT amount FROM books WHERE id = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sqlSelect);
-            pstmt.setLong(1, bookId);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlSelect);
+            prepareStatement.setLong(1, bookId);
+            ResultSet rs = prepareStatement.executeQuery();
             if (rs.next()) {
                 int amount = rs.getInt("amount");
                 amount++;

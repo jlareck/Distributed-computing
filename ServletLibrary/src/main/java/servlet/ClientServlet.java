@@ -27,14 +27,14 @@ public class ClientServlet extends HttpServlet {
             case Action.REQUEST_BOOK:
                 BookRequestDAO.addRequest(act.get("userId").getAsInt(), act.get("bookId").getAsInt());
                 break;
-            case Action.LIST_BOOKS: {
+            case Action.BOOKS_LIST: {
                 ArrayList<Book> books = BookDAO.getBooksFromDB(Constants.SELECT_ALL_INT, Constants.SELECT_ALL_STR);
-                String json_books = new Gson().toJson(books);
-                System.out.println(json_books);
-                resp.getWriter().write(json_books);
+                String jsonBooks = new Gson().toJson(books);
+                System.out.println(jsonBooks);
+                resp.getWriter().write(jsonBooks);
             }
             break;
-            case Action.LIST_REQUESTS: {
+            case Action.REQUESTS_LIST: {
                 ArrayList<BookRequest> reqs = BookRequestDAO.getBookRequests(act.get("userId").getAsInt(),
                         Constants.SELECT_ALL_INT);
                 String json_reqs = new Gson().toJson(reqs);

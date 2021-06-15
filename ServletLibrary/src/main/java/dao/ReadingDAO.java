@@ -19,10 +19,10 @@ public class ReadingDAO {
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             String sqlQuery = "SELECT * FROM reading WHERE id_user = ? AND id_book = ?";
 
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1, userId);
-            pstmt.setLong(2, bookId);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.setLong(1, userId);
+            prepareStatement.setLong(2, bookId);
+            ResultSet rs = prepareStatement.executeQuery();
             while (rs.next()) {
                 Reading reading = new Reading(rs.getLong("id_user"), rs.getLong("id_book"));
                 reads.add(reading);
@@ -42,8 +42,8 @@ public class ReadingDAO {
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
             String sql_query = String.format("INSERT INTO reading (id_user, id_book) VALUES(%s, %s)",
                     userId, bookId, false);
-            PreparedStatement pstmt = connection.prepareStatement(sql_query);
-            pstmt.executeUpdate();
+            PreparedStatement prepareStatement = connection.prepareStatement(sql_query);
+            prepareStatement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException | InterruptedException e) {
@@ -60,10 +60,10 @@ public class ReadingDAO {
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
             String sqlQuery = "DELETE FROM reading WHERE id_user = ? AND id_book = ?";
 
-            PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1, userId);
-            pstmt.setLong(2, bookId);
-            pstmt.executeUpdate();
+            PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
+            prepareStatement.setLong(1, userId);
+            prepareStatement.setLong(2, bookId);
+            prepareStatement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException | InterruptedException e) {
