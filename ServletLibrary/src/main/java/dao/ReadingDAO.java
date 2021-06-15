@@ -15,6 +15,8 @@ public class ReadingDAO {
         ArrayList<Reading> reads = new ArrayList<>();
         try {
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             String sqlQuery = "SELECT * FROM reading WHERE id_user = ? AND id_book = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sqlQuery);

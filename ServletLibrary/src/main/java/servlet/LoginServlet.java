@@ -22,8 +22,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-        System.out.println("wow");
-
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 
         String password = data.get("password").getAsString();

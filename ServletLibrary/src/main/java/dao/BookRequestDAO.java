@@ -13,6 +13,7 @@ public class BookRequestDAO {
         ArrayList<BookRequest> reqs = new ArrayList<>();
         try {
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
+
             final String sqlQuery = "SELECT * FROM request_handler WHERE id_user = ? AND id_book = ?";
             PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
             pstmt.setLong(1, userId);
