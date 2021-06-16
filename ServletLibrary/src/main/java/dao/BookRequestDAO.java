@@ -37,7 +37,6 @@ public class BookRequestDAO {
                 return false;
             }
             Connection connection = ConnectionPool.getConnectionPool().getConnection();
-            //final String sqlQuery = "INSERT INTO request_handler (?, ?, ?) VALUES()";
             String sqlQuery = String.format("INSERT INTO request_handler (id_user, id_book, accepted) VALUES(%s, %s, %s)",
                     userId, bookId, false);
             PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);

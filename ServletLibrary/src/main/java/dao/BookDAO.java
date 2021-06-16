@@ -44,12 +44,12 @@ public class BookDAO {
             prepareStatement.setLong(1, bookId);
             ResultSet rs = prepareStatement.executeQuery();
             if (rs.next()) {
-                int amount = rs.getInt("amount");
-                if (amount != 0) {
-                    amount--;
-                    final String sqlUpdate = "UPDATE books SET amount = ? WHERE id = ?";
+                int stock = rs.getInt("stock");
+                if (stock != 0) {
+                    stock--;
+                    final String sqlUpdate = "UPDATE books SET stock = ? WHERE id = ?";
                     PreparedStatement st = connection.prepareStatement(sqlUpdate);
-                    st.setInt(1, amount);
+                    st.setInt(1, stock);
                     st.setLong(2, bookId);
                     st.executeUpdate();
                     st.close();
@@ -68,16 +68,16 @@ public class BookDAO {
         Connection connection;
         try {
             connection = ConnectionPool.getConnectionPool().getConnection();
-            String sqlSelect = "SELECT amount FROM books WHERE id = ?";
+            String sqlSelect = "SELECT stock FROM books WHERE id = ?";
             PreparedStatement prepareStatement = connection.prepareStatement(sqlSelect);
             prepareStatement.setLong(1, bookId);
             ResultSet rs = prepareStatement.executeQuery();
             if (rs.next()) {
-                int amount = rs.getInt("amount");
-                amount++;
-                final String sqlUpdate = "UPDATE books SET amount = ? WHERE id = ?";
+                int stock = rs.getInt("stock");
+                stock++;
+                final String sqlUpdate = "UPDATE books SET stock = ? WHERE id = ?";
                 PreparedStatement st = connection.prepareStatement(sqlUpdate);
-                st.setInt(1, amount);
+                st.setInt(1, stock);
                 st.setLong(2, bookId);
                 st.executeUpdate();
                 st.close();
