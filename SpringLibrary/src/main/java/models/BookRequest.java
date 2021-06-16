@@ -26,7 +26,6 @@ public class BookRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book;
 
-    @Basic
     @Column(name = "accepted")
     private boolean isAccepted;
 

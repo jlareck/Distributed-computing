@@ -10,7 +10,6 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Getter
 @Setter
-@Builder
 @Data
 @NoArgsConstructor
 public class Reading {

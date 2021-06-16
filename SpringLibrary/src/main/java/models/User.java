@@ -18,27 +18,27 @@ public class User {
     @GeneratedValue(generator = "id_user", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Basic
+
     @Column(name = "name")
     private String name;
 
-    @Basic
+
     @Column(name = "lastname")
     private String lastname;
 
-    @Basic
+
     @Column(name = "login")
     private String login;
 
-    @Basic
+
     @Column(name = "password")
     private String password;
 
-    @Basic
+
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Basic
+
     @Column(name = "role")
     private String role;
 
