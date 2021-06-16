@@ -27,7 +27,7 @@ public class ReadingDAO {
                 Reading reading = new Reading(rs.getLong("id_user"), rs.getLong("id_book"));
                 reads.add(reading);
             }
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public class ReadingDAO {
                     userId, bookId, false);
             PreparedStatement prepareStatement = connection.prepareStatement(sql_query);
             prepareStatement.executeUpdate();
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
             return true;
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
@@ -64,7 +64,7 @@ public class ReadingDAO {
             prepareStatement.setLong(1, userId);
             prepareStatement.setLong(2, bookId);
             prepareStatement.executeUpdate();
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
             return true;
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();

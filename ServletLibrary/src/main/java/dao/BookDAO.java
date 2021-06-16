@@ -27,7 +27,7 @@ public class BookDAO {
                 book.setStock(rs.getInt(3));
                 books.add(book);
             }
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class BookDAO {
                     book_taken = true;
                 }
             }
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -83,7 +83,7 @@ public class BookDAO {
                 st.close();
                 bookReturned = true;
             }
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }

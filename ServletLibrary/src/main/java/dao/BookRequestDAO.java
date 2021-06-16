@@ -24,7 +24,7 @@ public class BookRequestDAO {
                         rs.getBoolean("accepted"));
                 reqs.add(book_request);
             }
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class BookRequestDAO {
                     userId, bookId, false);
             PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);
             prepareStatement.executeUpdate();
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
             return true;
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class BookRequestDAO {
             prepareStatement.setLong(1,userId);
             prepareStatement.setLong(2, bookId);
             prepareStatement.executeUpdate();
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
             return true;
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class BookRequestDAO {
             prepareStatement.setLong(1, userId);
             prepareStatement.setLong(2, bookId);
             prepareStatement.executeUpdate();
-            connection.close();
+            ConnectionPool.getConnectionPool().releaseConnection(connection);
             return true;
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
