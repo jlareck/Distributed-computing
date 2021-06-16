@@ -36,7 +36,6 @@ public class LoginServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(json);
-            System.out.println(json);
         } catch (Exception e) {
             request.getRequestDispatcher("Error.jsp").forward(request, response);
         }

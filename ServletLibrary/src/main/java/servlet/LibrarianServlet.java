@@ -18,14 +18,14 @@ import dao.*;
 public class LibrarianServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        JsonObject act = new Gson().fromJson(req.getReader(), JsonObject.class);
-        System.out.println("wow");
+        JsonObject jsonObject = new Gson().fromJson(req.getReader(), JsonObject.class);
+
         resp.addHeader("Access-Control-Allow-Origin", "http://localhost:5000");
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        switch (act.get("action").getAsString()) {
+        switch (jsonObject.get("action").getAsString()) {
             case Action.ACCEPT_BOOK:
-                BookRequestDAO.acceptRequest(act.get("id_user").getAsInt(), act.get("id_book").getAsInt());
+                BookRequestDAO.acceptRequest(jsonObject.get("id_user").getAsInt(), jsonObject.get("id_book").getAsInt());
                 break;
             case Action.REQUESTS_LIST: {
                 ArrayList<BookRequest> reqs = BookRequestDAO.getBookRequests(Constants.SELECT_ALL_INT,
@@ -35,8 +35,8 @@ public class LibrarianServlet extends HttpServlet {
             }
             break;
             case Action.REFUSE_BOOK: {
-                int userId = act.get("id_user").getAsInt();
-                int bookId = act.get("id_book").getAsInt();
+                int userId = jsonObject.get("id_user").getAsInt();
+                int bookId = jsonObject.get("id_book").getAsInt();
                 ArrayList<BookRequest> reqs = BookRequestDAO.getBookRequests(userId, bookId);
                 Answer answer;
                 if (reqs.isEmpty()) {

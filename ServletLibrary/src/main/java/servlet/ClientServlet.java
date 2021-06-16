@@ -19,7 +19,6 @@ public class ClientServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JsonObject act = new Gson().fromJson(req.getReader(), JsonObject.class);
-        System.out.println("wow");
         resp.addHeader("Access-Control-Allow-Origin", "http://localhost:5000");
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -30,7 +29,6 @@ public class ClientServlet extends HttpServlet {
             case Action.BOOKS_LIST: {
                 ArrayList<Book> books = BookDAO.getBooksFromDB(Constants.SELECT_ALL_INT, Constants.SELECT_ALL_STR);
                 String jsonBooks = new Gson().toJson(books);
-                System.out.println(jsonBooks);
                 resp.getWriter().write(jsonBooks);
             }
             break;
@@ -59,7 +57,6 @@ public class ClientServlet extends HttpServlet {
                 }
                 String jsonAnswer = new Gson().toJson(answer);
                 resp.getWriter().write(jsonAnswer);
-                System.out.println(jsonAnswer);
             }
             break;
             case Action.RETURN_BOOK: {
@@ -75,7 +72,7 @@ public class ClientServlet extends HttpServlet {
                 if (readings.size() != 0) {
                     String jsonReading = new Gson().toJson(readings.get(0));
                     resp.getWriter().write(jsonReading);
-                    System.out.println(jsonReading);
+
                 } else {
                     Answer answer = new Answer(false, "No readings");
                     String json_answer = new Gson().toJson(answer);
