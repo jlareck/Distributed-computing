@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RequestBookService {
+public class BookRequestService {
     @Autowired
     BookRequestRepository repo;
 
@@ -29,11 +29,11 @@ public class RequestBookService {
         return repo.findByBook(book);
     }
 
-    public void save(BookRequest requestBook) {
-        repo.save(requestBook);
+    public void save(BookRequest bookRequest) {
+        repo.save(bookRequest);
     }
 
-    public void delete(BookRequest requestBook) {
-        repo.delete(requestBook);
+    public void delete(BookRequest bookRequest) {
+        repo.delete(bookRequest);
     }
 }

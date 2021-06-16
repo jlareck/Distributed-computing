@@ -38,6 +38,10 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    @Basic
+    @Column(name = "role")
+    private String role;
+
     public void setId(Long id) {
         this.id = id;
     }

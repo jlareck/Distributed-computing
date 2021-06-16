@@ -34,25 +34,6 @@ public class UserService {
         return userRepo.findByLogin(login);
     }
 
-    public UserDTO getUserDto(String Authorization) {
-        UserDTO userDTO = new UserDTO();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            if (authentication.getPrincipal() instanceof KeycloakPrincipal) {
-                KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>) authentication
-                        .getPrincipal();
-
-                AccessToken accessToken = kp.getKeycloakSecurityContext().getToken();
-                Set<String> roles = accessToken.getResourceAccess().get("springboot-microservice").getRoles();
-                Optional<String> optionalRole = roles.stream().findFirst();
-                userDTO.setLastname(accessToken.getFamilyName());
-                userDTO.setName(accessToken.getGivenName());
-                userDTO.setLogin(accessToken.getPreferredUsername());
-            }
-        }
-        return userDTO;
-    }
-
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepo.findAll();
         List<UserDTO> answer = new ArrayList<>();
@@ -62,7 +43,20 @@ public class UserService {
         return answer;
     }
 
-    public void returnBook(int id_user, int id_book) {
-
+    public UserDTO getUserDto(String authorisation) {
+        UserDTO userDTO = new UserDTO();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof KeycloakPrincipal) {
+                KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>) authentication.getPrincipal();
+                AccessToken accessToken = kp.getKeycloakSecurityContext().getToken();
+                Set<String> roles = accessToken.getResourceAccess().get("springboot-microservice").getRoles();
+                Optional<String> optionalRole = roles.stream().findFirst();
+                userDTO.setLastname(accessToken.getFamilyName());
+                userDTO.setName(accessToken.getGivenName());
+                userDTO.setLogin(accessToken.getPreferredUsername());
+            }
+        }
+        return userDTO;
     }
 }

@@ -25,7 +25,7 @@ public class ReadingService {
     public Reading findByBookAndUser(Book book, User user) {
         var readings = repo.findByUser(user);
         for (Reading reading : readings) {
-            if (reading.getBook().getId() == book.getId()) {
+            if (reading.getBook().getId().equals(book.getId())) {
                 return reading;
             }
         }

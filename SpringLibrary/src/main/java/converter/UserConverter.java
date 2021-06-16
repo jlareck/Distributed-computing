@@ -16,6 +16,7 @@ public class UserConverter {
         dto.setLogin(entity.getLogin());
         dto.setPassword(entity.getPassword());
         dto.setAdmin(entity.isAdmin());
+        dto.setRole(entity.getRole());
         return dto;
     }
 
